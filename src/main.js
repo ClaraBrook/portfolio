@@ -19,6 +19,12 @@ const sizes = {
     height: window.innerHeight
 }
 
+const geometry = new THREE.BoxGeometry(1, 1, 1)
+const material = (new THREE.MeshBasicMaterial({color:"red", wireframe:true}))
+const mesh = new THREE.Mesh(geometry, material)
+
+scene.add(mesh)
+
 window.addEventListener('resize', () =>
 {
     // Update sizes
@@ -59,7 +65,11 @@ const clock = new THREE.Timer()
 
 const tick = () =>
 {
+    clock.update()
     const elapsedTime = clock.getElapsed()
+    console.log(elapsedTime)
+    mesh.rotation.x = elapsedTime * 0.2
+    mesh.rotation.y = elapsedTime * 0.3
 
     // Render
     renderer.render(scene, camera)
