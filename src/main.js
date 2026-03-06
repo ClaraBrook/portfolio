@@ -1,6 +1,12 @@
 import './style.css'
 import * as THREE from 'three'
 
+import { registerRoute, startRouter } from './router'
+import { setPage, updatePage } from './engine/sceneState'
+
+import { createHome } from './pages/home'
+import { createAbout } from './pages/about'
+
 /**
  * Base
  */
@@ -14,6 +20,7 @@ const scene = new THREE.Scene()
 /**
  * Sizes
  */
+
 const sizes = {
     width: window.innerWidth,
     height: window.innerHeight
@@ -21,15 +28,12 @@ const sizes = {
 
 window.addEventListener('resize', () =>
 {
-    // Update sizes
     sizes.width = window.innerWidth
     sizes.height = window.innerHeight
 
-    // Update camera
     camera.aspect = sizes.width / sizes.height
     camera.updateProjectionMatrix()
 
-    // Update renderer
     renderer.setSize(sizes.width, sizes.height)
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 })
@@ -37,7 +41,7 @@ window.addEventListener('resize', () =>
 /**
  * Camera
  */
-// Base camera
+
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
 camera.position.z = 2
 scene.add(camera)
@@ -45,16 +49,33 @@ scene.add(camera)
 /**
  * Renderer
  */
+
 const renderer = new THREE.WebGLRenderer({
     canvas: canvas
 })
+
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 renderer.setClearAlpha(0)
 
 /**
+ * Routes
+ */
+
+registerRoute("/", () => {
+    setPage(createHome(scene))
+})
+
+registerRoute("/about", () => {
+    setPage(createAbout(scene))
+})
+
+startRouter()
+
+/**
  * Animate
  */
+
 const clock = new THREE.Timer()
 
 const tick = () =>
@@ -62,10 +83,10 @@ const tick = () =>
     clock.update()
     const elapsedTime = clock.getElapsed()
 
-    // Render
+    updatePage(elapsedTime)
+
     renderer.render(scene, camera)
 
-    // Call tick again on the next frame
     window.requestAnimationFrame(tick)
 }
 
