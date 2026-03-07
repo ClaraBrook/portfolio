@@ -55,8 +55,10 @@ function processPointer(clientX, clientY) {
 }
 
 function calculateFontSize() {
-  // adjust this multiplier to taste
-  return window.innerWidth * 0.0005
+
+  const minViewport = Math.min(window.innerWidth, window.innerHeight)
+
+  return minViewport * 0.0006
 }
 
 function buildText(scene) {
@@ -70,7 +72,7 @@ function buildText(scene) {
     {
       font: font,
       size: size,
-      depth: 0.2,
+      depth: size * 0.6,
       curveSegments: 12,
       bevelEnabled: true,
       bevelThickness: size * 0.08,
@@ -90,6 +92,7 @@ function buildText(scene) {
     })
 
     textMesh = new THREE.Mesh(geometry, material)
+
     scene.add(textMesh)
 
   } else {
@@ -98,6 +101,7 @@ function buildText(scene) {
     textMesh.geometry = geometry
 
   }
+
 }
 
 export function createHome(scene) {
@@ -133,10 +137,12 @@ export function createHome(scene) {
         (loadedFont) => {
 
           font = loadedFont
+
           buildText(scene)
 
         }
       )
+
     },
 
     update() {
@@ -148,6 +154,7 @@ export function createHome(scene) {
 
         spinVelocity.x = smoothDamp(spinVelocity.x)
         spinVelocity.y = smoothDamp(spinVelocity.y)
+
       }
 
     },
@@ -157,9 +164,12 @@ export function createHome(scene) {
       window.removeEventListener("resize", handleResize)
 
       if (textMesh) {
+
         scene.remove(textMesh)
+
         textMesh.geometry.dispose()
         textMesh.material.dispose()
+
         textMesh = null
       }
 
