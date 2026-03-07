@@ -58,7 +58,7 @@ function calculateFontSize() {
 
   const minViewport = Math.min(window.innerWidth, window.innerHeight)
 
-  return minViewport * 0.0006
+  return minViewport * 0.0007
 }
 
 function buildText(scene) {
