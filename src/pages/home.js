@@ -39,7 +39,7 @@ function processPointer(clientX, clientY) {
   const y = clientY / window.innerHeight
 
   mouse.x = x * 2 - 1
-  mouse.y = -(y * 2 - 1)
+  mouse.y = (y * 2 - 1)
 
   const dx = mouse.x - prevMouse.x
   const dy = mouse.y - prevMouse.y
