@@ -14,8 +14,25 @@ const spinVelocity = {
   y: 0
 }
 
-const damping = 0.93
+const damping = 0.92
 const spinStrength = 0.9
+
+const maxSpeed = 0.25
+const cruiseSpeed = 0.001
+
+function clampVelocity(v) {
+  return Math.max(-maxSpeed, Math.min(maxSpeed, v))
+}
+
+function smoothDamp(v) {
+
+  if (Math.abs(v) < 0.00001) return v
+
+  const sign = Math.sign(v)
+
+  // smooth approach to cruise speed
+  return v * damping + sign * cruiseSpeed * (1 - damping)
+}
 
 function processPointer(clientX, clientY) {
 
@@ -31,6 +48,9 @@ function processPointer(clientX, clientY) {
   spinVelocity.y += dx * spinStrength
   spinVelocity.x += dy * spinStrength
 
+  spinVelocity.x = clampVelocity(spinVelocity.x)
+  spinVelocity.y = clampVelocity(spinVelocity.y)
+
   prevMouse.x = mouse.x
   prevMouse.y = mouse.y
 }
@@ -44,24 +64,14 @@ export function createHome(scene) {
         <p>Welcome to my portfolio.</p>
       `)
 
-      /**
-       * Mouse movement
-       */
       window.addEventListener("mousemove", (event) => {
         processPointer(event.clientX, event.clientY)
       })
 
-      /**
-       * Touch movement
-       */
       window.addEventListener("touchmove", (event) => {
         const touch = event.touches[0]
         processPointer(touch.clientX, touch.clientY)
       })
-
-      /**
-       * 3D Text
-       */
 
       const fontLoader = new FontLoader()
 
@@ -105,8 +115,8 @@ export function createHome(scene) {
         textMesh.rotation.x += spinVelocity.x
         textMesh.rotation.y += spinVelocity.y
 
-        spinVelocity.x *= damping
-        spinVelocity.y *= damping
+        spinVelocity.x = smoothDamp(spinVelocity.x)
+        spinVelocity.y = smoothDamp(spinVelocity.y)
       }
     },
 
