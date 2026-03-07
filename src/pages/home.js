@@ -1,10 +1,10 @@
 import * as THREE from "three"
 import { setHTML } from "../engine/ui"
-import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'
+import { FontLoader } from "three/examples/jsm/loaders/FontLoader.js"
 import { TextGeometry } from "three/examples/jsm/Addons.js"
 
-let cube
 let textMesh
+let font
 
 const mouse = { x: 0, y: 0 }
 const prevMouse = { x: 0, y: 0 }
@@ -30,7 +30,6 @@ function smoothDamp(v) {
 
   const sign = Math.sign(v)
 
-  // smooth approach to cruise speed
   return v * damping + sign * cruiseSpeed * (1 - damping)
 }
 
@@ -55,8 +54,60 @@ function processPointer(clientX, clientY) {
   prevMouse.y = mouse.y
 }
 
+function calculateFontSize() {
+  // adjust this multiplier to taste
+  return window.innerWidth * 0.0005
+}
+
+function buildText(scene) {
+
+  if (!font) return
+
+  const size = calculateFontSize()
+
+  const geometry = new TextGeometry(
+    "Clara\nBrook",
+    {
+      font: font,
+      size: size,
+      depth: 0.2,
+      curveSegments: 12,
+      bevelEnabled: true,
+      bevelThickness: size * 0.08,
+      bevelSize: size * 0.05,
+      bevelOffset: 0,
+      bevelSegments: 5
+    }
+  )
+
+  geometry.center()
+
+  if (!textMesh) {
+
+    const material = new THREE.MeshBasicMaterial({
+      color: "red",
+      wireframe: true
+    })
+
+    textMesh = new THREE.Mesh(geometry, material)
+    scene.add(textMesh)
+
+  } else {
+
+    textMesh.geometry.dispose()
+    textMesh.geometry = geometry
+
+  }
+}
+
 export function createHome(scene) {
+
+  function handleResize() {
+    buildText(scene)
+  }
+
   return {
+
     init() {
 
       setHTML(`
@@ -73,42 +124,22 @@ export function createHome(scene) {
         processPointer(touch.clientX, touch.clientY)
       })
 
+      window.addEventListener("resize", handleResize)
+
       const fontLoader = new FontLoader()
 
       fontLoader.load(
-        '/fonts/helvetiker_bold.typeface.json',
-        (font) => {
+        "/fonts/helvetiker_bold.typeface.json",
+        (loadedFont) => {
 
-          const textGeometry = new TextGeometry(
-            'Clara\nBrook',
-            {
-              font: font,
-              size: 0.35,
-              depth: 0.2,
-              curveSegments: 12,
-              bevelEnabled: true,
-              bevelThickness: 0.03,
-              bevelSize: 0.02,
-              bevelOffset: 0,
-              bevelSegments: 5
-            }
-          )
+          font = loadedFont
+          buildText(scene)
 
-          textGeometry.center()
-
-          const textMaterial = new THREE.MeshBasicMaterial({
-            color: "red",
-            wireframe: true
-          })
-
-          textMesh = new THREE.Mesh(textGeometry, textMaterial)
-
-          scene.add(textMesh)
         }
       )
     },
 
-    update(time) {
+    update() {
 
       if (textMesh) {
 
@@ -118,11 +149,22 @@ export function createHome(scene) {
         spinVelocity.x = smoothDamp(spinVelocity.x)
         spinVelocity.y = smoothDamp(spinVelocity.y)
       }
+
     },
 
     cleanup() {
-      if (cube) scene.remove(cube)
-      if (textMesh) scene.remove(textMesh)
+
+      window.removeEventListener("resize", handleResize)
+
+      if (textMesh) {
+        scene.remove(textMesh)
+        textMesh.geometry.dispose()
+        textMesh.material.dispose()
+        textMesh = null
+      }
+
     }
+
   }
+
 }
