@@ -14,8 +14,8 @@ const spinVelocity = {
   y: 0
 }
 
-const damping = 0.92
-const spinStrength = 1
+const damping = 0.93
+const spinStrength = 0.9
 
 function processPointer(clientX, clientY) {
 
@@ -96,13 +96,6 @@ export function createHome(scene) {
           scene.add(textMesh)
         }
       )
-
-      cube = new THREE.Mesh(
-        new THREE.BoxGeometry(),
-        new THREE.MeshNormalMaterial()
-      )
-
-      // scene.add(cube)
     },
 
     update(time) {
@@ -114,10 +107,6 @@ export function createHome(scene) {
 
         spinVelocity.x *= damping
         spinVelocity.y *= damping
-      }
-
-      if (cube) {
-        cube.rotation.y = time * 0.5
       }
     },
 
