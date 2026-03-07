@@ -56,9 +56,17 @@ function processPointer(clientX, clientY) {
 
 function calculateFontSize() {
 
-  const minViewport = Math.min(window.innerWidth, window.innerHeight)
+  const w = window.innerWidth
+  const h = window.innerHeight
 
-  return minViewport * 0.0007
+  const minViewport = Math.min(w, h)
+
+  // If height is the limiting dimension, increase size slightly
+  const heightLimited = h < w
+
+  const multiplier = heightLimited ? 0.0008 : 0.0007
+
+  return minViewport * multiplier
 }
 
 function buildText(scene) {

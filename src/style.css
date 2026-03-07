@@ -8,8 +8,11 @@ html,
 body
 {
     overflow: hidden;
-    background-color: black;
     color: white;
+}
+
+body {
+    background-color: black;
 }
 
 .webgl
@@ -19,4 +22,8 @@ body
     left: 0;
     outline: none;
     z-index: -1;
+}
+
+#ui {
+    background: none;
 }
