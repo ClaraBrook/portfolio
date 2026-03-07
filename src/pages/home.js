@@ -14,11 +14,11 @@ const spinVelocity = {
   y: 0
 }
 
-const damping = 0.92
+const damping = 0.95
 const spinStrength = 0.9
 
 const maxSpeed = 0.25
-const cruiseSpeed = 0.001
+const cruiseSpeed = 0.0025
 
 function clampVelocity(v) {
   return Math.max(-maxSpeed, Math.min(maxSpeed, v))
