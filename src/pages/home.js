@@ -17,6 +17,24 @@ const spinVelocity = {
 const damping = 0.92
 const spinStrength = 1
 
+function processPointer(clientX, clientY) {
+
+  const x = clientX / window.innerWidth
+  const y = clientY / window.innerHeight
+
+  mouse.x = x * 2 - 1
+  mouse.y = -(y * 2 - 1)
+
+  const dx = mouse.x - prevMouse.x
+  const dy = mouse.y - prevMouse.y
+
+  spinVelocity.y += dx * spinStrength
+  spinVelocity.x += dy * spinStrength
+
+  prevMouse.x = mouse.x
+  prevMouse.y = mouse.y
+}
+
 export function createHome(scene) {
   return {
     init() {
@@ -27,25 +45,18 @@ export function createHome(scene) {
       `)
 
       /**
-       * Mouse Tracking
+       * Mouse movement
        */
-
       window.addEventListener("mousemove", (event) => {
+        processPointer(event.clientX, event.clientY)
+      })
 
-        const x = event.clientX / window.innerWidth
-        const y = event.clientY / window.innerHeight
-
-        mouse.x = x * 2 - 1
-        mouse.y = -(y * 2 - 1)
-
-        const dx = mouse.x - prevMouse.x
-        const dy = mouse.y - prevMouse.y
-
-        spinVelocity.y += dx * spinStrength
-        spinVelocity.x += dy * spinStrength
-
-        prevMouse.x = mouse.x
-        prevMouse.y = mouse.y
+      /**
+       * Touch movement
+       */
+      window.addEventListener("touchmove", (event) => {
+        const touch = event.touches[0]
+        processPointer(touch.clientX, touch.clientY)
       })
 
       /**
@@ -96,18 +107,10 @@ export function createHome(scene) {
 
     update(time) {
 
-      /**
-       * Apply spin velocity
-       */
-
       if (textMesh) {
 
         textMesh.rotation.x += spinVelocity.x
         textMesh.rotation.y += spinVelocity.y
-
-        /**
-         * Dampening
-         */
 
         spinVelocity.x *= damping
         spinVelocity.y *= damping
