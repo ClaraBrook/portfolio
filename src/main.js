@@ -10,6 +10,8 @@ import { setPage, updatePage } from './engine/sceneState'
 import { createHome } from './pages/home'
 import { createAbout } from './pages/about'
 
+import { initDotField, resizeDotField } from './engine/dotField'
+
 /**
  * Base
  */
@@ -51,6 +53,8 @@ window.addEventListener('resize', () =>
 
     renderer.setSize(sizes.width, sizes.height)
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+
+    resizeDotField()
 })
 
 /**
@@ -60,6 +64,9 @@ window.addEventListener('resize', () =>
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
 camera.position.z = 2
 scene.add(camera)
+
+// Initialize persistent background
+initDotField(scene, camera)
 
 /**
  * Renderer

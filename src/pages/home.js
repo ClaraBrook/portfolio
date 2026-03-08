@@ -98,7 +98,7 @@ function buildText(scene) {
         color: "red",
         metalness: 0.2,
         roughness: 0.35,
-        wireframe: true
+        wireframe: false
     })
 
     textMesh = new THREE.Mesh(geometry, material)
