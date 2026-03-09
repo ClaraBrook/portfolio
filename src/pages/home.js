@@ -95,9 +95,7 @@ function buildText(scene) {
   if (!textMesh) {
 
     const material = new THREE.MeshStandardMaterial({
-        color: "red",
-        metalness: 0.2,
-        roughness: 0.35,
+        color: 0x00FF41,
         wireframe: false
     })
 

@@ -47,29 +47,34 @@ export function initDotField(scene, camera) {
         transparent: true,
 
         uniforms: {
-            uMouse: { value: new THREE.Vector2() }
+            uMouse: { value: new THREE.Vector2() },
+            uMouseActive: { value: 0 }
         },
 
         vertexShader: `
 
         uniform vec2 uMouse;
+        uniform float uMouseActive;
+
         attribute vec3 aOriginal;
 
         void main(){
 
             vec3 pos = aOriginal;
 
-            float dist = distance(pos.xy, uMouse);
+            if(uMouseActive > 0.5){
 
-            float radius = 0.5;
+                float dist = distance(pos.xy, uMouse);
+                float radius = 0.45;
 
-            if(dist < radius){
+                if(dist < radius){
 
-                float force = (radius - dist) * 0.35;
+                    float force = (radius - dist) * 0.35;
+                    vec2 dir = normalize(pos.xy - uMouse);
 
-                vec2 dir = normalize(pos.xy - uMouse);
+                    pos.xy += dir * force;
 
-                pos.xy += dir * force;
+                }
 
             }
 
@@ -106,6 +111,8 @@ export function initDotField(scene, camera) {
         mouseNDC.x = (e.clientX / window.innerWidth) * 2 - 1
         mouseNDC.y = -(e.clientY / window.innerHeight) * 2 + 1
 
+        material.uniforms.uMouseActive.value = 1
+
         updateMouseWorld(camera)
 
     }
@@ -116,6 +123,8 @@ export function initDotField(scene, camera) {
 
         mouseNDC.x = (t.clientX / window.innerWidth) * 2 - 1
         mouseNDC.y = -(t.clientY / window.innerHeight) * 2 + 1
+
+        material.uniforms.uMouseActive.value = 1
 
         updateMouseWorld(camera)
 

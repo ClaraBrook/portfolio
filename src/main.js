@@ -26,12 +26,12 @@ const scene = new THREE.Scene()
  * Lighting
  */
 
-const directionalLight = new THREE.DirectionalLight(0xffffff, 2)
+const directionalLight = new THREE.DirectionalLight(0x00FF41, 2.5)
 directionalLight.position.set(2, 3, 4)
 
 scene.add(directionalLight)
 
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.4)
+const ambientLight = new THREE.AmbientLight(0x00FF41, 0.6)
 scene.add(ambientLight)
 
 /**
