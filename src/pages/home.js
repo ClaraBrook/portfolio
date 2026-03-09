@@ -123,8 +123,6 @@ export function createHome(scene) {
     init() {
 
       setHTML(`
-        <h1>Home</h1>
-        <p>Welcome to my portfolio.</p>
       `)
 
       window.addEventListener("mousemove", (event) => {

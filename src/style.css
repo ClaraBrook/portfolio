@@ -31,3 +31,16 @@ body {
 .resume-container {
     background-color: rgba(1,1,1,0.6);
 }
+
+nav {
+    z-index: 1;
+    position: relative;
+}
+
+a {
+    color: white
+}
+
+a:visited {
+  color: white;
+}
