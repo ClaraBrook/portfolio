@@ -65,7 +65,7 @@ export function initDotField(scene, camera) {
             if(uMouseActive > 0.5){
 
                 float dist = distance(pos.xy, uMouse);
-                float radius = 0.45;
+                float radius = 0.7;
 
                 if(dist < radius){
 
