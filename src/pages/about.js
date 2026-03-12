@@ -48,12 +48,12 @@ export function createAbout(scene) {
             <header class="resume-header">
               <h1>Clara Brook</h1>
               <h2>Software Engineer</h2>
+              <h3>@Accenture / Salesforce Developer</h3>
             </header>
 
             <section class="resume-section">
               <h3>Contact</h3>
               <div class="contact-grid">
-                <div><strong>Phone:</strong> +1 (267) 421-7575</div>
                 <div><strong>Email:</strong> clarabrook97@gmail.com</div>
                 <div><strong>Location:</strong> Philadelphia, PA</div>
                 <div><strong>Profile:</strong>
@@ -144,6 +144,12 @@ export function createAbout(scene) {
           }
 
           .resume-header h2{
+            font-weight:400;
+            opacity:0.8;
+            line-height: 1;
+          }
+
+          .resume-header h3{
             font-weight:400;
             opacity:0.8;
           }
